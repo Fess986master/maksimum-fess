@@ -1,0 +1,57 @@
+const func = function (args) {
+  console.log('arguments')
+  console.log(args)
+}
+
+// func(15, 16)
+
+const trottle = function (fn, ms) {
+  //console.log(func);
+  //console.log(ms);
+  // func(ms)
+  let isTrottled = false;
+  let savedThis, savedArgs
+
+
+
+  function wrapper(args) {
+
+    console.log('wrapper')
+    //console.log(savedThis)
+
+    if (isTrottled) {
+      savedThis = this
+      savedArgs = args
+      return
+    }
+
+    console.log(this)
+
+    fn.call(this, args)
+
+    setTimeout(()=> {
+      isTrottled = true
+
+      if (savedArgs) {
+        wrapper.apply(savedThis, savedArgs)
+        savedThis = null
+        savedArgs = null
+      }
+
+      //savesThis = 123;
+      //console.log(savedThis)
+      console.log('delay')
+    }, ms)
+  }
+
+  return wrapper
+};
+
+const trottledFunc = trottle(func, 1000);
+
+trottledFunc(1)
+trottledFunc(2)
+trottledFunc(3)
+
+
+https://finance.mail.ru/2024-04-18/eksperty-predskazali-revolyuciyu-zarplat-i-konec-deshevogo-truda-v-rossii-60723127/
